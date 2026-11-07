@@ -4,7 +4,7 @@
 
 | ID | 决策 | 当前基线 | 不在本阶段做什么 |
 |---|---|---|---|
-| D-001 | 包管理器 | 新仓库采用 pnpm workspace，并提交 lockfile | 不混用 npm/yarn/pnpm |
+| D-001 | 包管理器 | Greenfield 新仓库采用 pnpm workspace，并提交 pnpm-lock.yaml | 不混用 npm/yarn/pnpm |
 | D-002 | 语言 | TypeScript strict | 不引入第二套后端语言 |
 | D-003 | Web | Workbench 使用 Next.js App Router | Phase 1 不创建 Storefront |
 | D-004 | API | 独立 Node.js API 服务；新仓库优先 Fastify | 不把全部业务 API 混写进前端页面 |
@@ -25,6 +25,7 @@
 | D-019 | Dashboard | 只展示数据库真实统计 | 不展示虚构任务数、销售额或活动记录 |
 | D-020 | 运行环境 | Docker Compose 提供 PostgreSQL、Redis；应用本地开发运行 | 暂不强制所有应用容器化 |
 | D-021 | Workspace 包名 | `@workspace/workbench`、`@workspace/api`、`@workspace/worker`、`@workspace/database`、`@workspace/contracts`、`@workspace/shared`、`@workspace/config` | 不在不同 Issue 中自行变更包名 |
+| D-022 | 版本锁定 | 固定 Node.js/pnpm 版本；`save-exact=true`；直接依赖使用明确版本；提交 lockfile | 不使用浮动直接依赖版本 |
 
 ## 建议数据模型（Phase 1 最小集合）
 
@@ -116,3 +117,10 @@
 ## API 响应建议
 
 成功响应统一包含 `data`；列表包含 `items`、`page`、`pageSize`、`total`。错误统一包含 `error.code`、`error.message`、`error.requestId`。不得向客户端返回 SQL、堆栈、凭据或其他项目内容。
+
+
+## Greenfield 工程边界
+
+- 当前项目没有旧业务代码迁移任务。
+- 不克隆 `agent-autoloop` 作为产品代码仓库。
+- `agent-autoloop` 仅允许作为后续技术研究或 POC 参考，未经独立验证不得直接作为产品核心依赖。

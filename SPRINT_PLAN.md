@@ -16,7 +16,7 @@
 
 ```mermaid
 flowchart TD
-  P001[P0-01 仓库审计] --> P002[P0-02 Monorepo]
+  P001[P0-01 Greenfield 基线与环境检查] --> P002[P0-02 Monorepo]
   P002 --> P003[P0-03 质量工具链]
   P002 --> P004[P0-04 本地基础设施]
   P002 --> P005[P0-05 服务骨架与健康检查]
@@ -56,7 +56,7 @@ flowchart TD
 
 | ID | Issue | 依赖 | 估算 | 主要产物 |
 |---|---|---|---:|---|
-| P0-01 | Repository Audit & Baseline | 无 | 0.5–1 天 | `docs/sprints/phase-0/BASELINE_AUDIT.md` |
+| P0-01 | Greenfield Baseline & Environment Check | 无 | 0.5 天 | `BASELINE_AUDIT.md` + 环境能力结论 |
 | P0-02 | Monorepo Bootstrap | P0-01 | 0.5–1 天 | Workspace、应用骨架、lockfile |
 | P0-03 | Quality & Test Toolchain | P0-02 | 0.5–1 天 | lint/typecheck/test/format scripts |
 | P0-04 | Local Infrastructure | P0-02 | 0.5 天 | Docker Compose、PG/Redis health |
@@ -81,7 +81,7 @@ flowchart TD
 ## 6. Gate 标准
 
 ### G0：工程基线通过
-- [ ] 安装依赖不报错，lockfile 一致。
+- [ ] 在真实 Shell 环境完成依赖安装，lockfile 一致。
 - [ ] PostgreSQL、Redis 健康检查通过。
 - [ ] Workbench、API、Worker 均能启动。
 - [ ] `lint`、`typecheck`、`test`、`build` 通过。

@@ -1,76 +1,119 @@
-# P0-01 — Repository Audit & Baseline
+# P0-01 — Greenfield Repository Baseline & Environment Check
 
-**优先级**：P0（阻断后续任务）  
-**估算**：0.5–1 工程日  
+**优先级**：P0  
+**估算**：0.5 工程日  
 **依赖**：无  
 **可并行**：否
 
 ## 1. 目标
 
-摸清目标仓库当前状态，形成真实的架构/代码/运行环境基线，避免 AI 编码团队误把已有项目当新项目重建。该任务只做审计和文档，默认不修改业务代码。
+本项目是 Greenfield 项目。
 
-## 2. 输入文件（先读）
+P0-01 不负责寻找旧业务代码或迁移现有系统，而是：
 
-- `AGENTS.md`（若尚不存在，先读取启动包内版本，不要立即覆盖仓库中的现有规则）
-- `package.json`、lockfile、workspace 配置（存在时）
-- `tsconfig*`、lint/format/test 配置
-- `apps/`、`packages/`、`src/`、`prisma/` 或现有等价目录
-- `docker-compose*`、`.env.example`、CI Workflow
-- `README*`、`docs/`、现有 ADR
-- `git status --short`、`git log -5 --oneline`
+1. 确认目标 Git 仓库可访问；
+2. 确认当前 Git 基线；
+3. 确认工作区状态；
+4. 确认实际执行环境能力；
+5. 确认 Sprint 文档完整；
+6. 为 P0-02 建立真实的工程起点。
+
+## 2. 输入文件
+
+必须先读取：
+
+- `AGENTS.md`
+- `README.md`
+- `DECISIONS.md`
+- `SPRINT_PLAN.md`
+- `ENVIRONMENT_COMPATIBILITY.md`
+- 当前仓库已有 Sprint 文档
 
 ## 3. 修改范围
 
-仅新增/更新：
-- `docs/sprints/phase-0/BASELINE_AUDIT.md`
-- `docs/adr/ADR-0001-phase0-1-baseline.md`（只有需要记录确认后的决策时）
+默认只允许新增或更新：
 
-审计报告必须覆盖：仓库树、当前框架、Node/包管理器、服务入口、数据库/ORM、认证、测试、CI、本地启动方式、现存未提交变更、可复用模块、缺口、风险和建议路径映射。
-
-对每项建议标注：`EXISTS`、`PARTIAL`、`MISSING`、`RISK`。不得假设文件存在或命令成功。
-
-## 4. 禁止事项
-
-- 不得删除、移动或批量格式化代码。
-- 不得重新初始化仓库或覆盖 lockfile。
-- 不得升级依赖或重写配置。
-- 不得把“符合任务包示例目录”作为重构理由。
-- 不得在审计报告中声称运行过未实际运行的命令。
-
-## 5. 实施步骤
-
-1. 执行 `git status --short`、`git log -5 --oneline`、`find . -maxdepth 3 -type f`（按环境调整）。
-2. 读取根配置和关键应用入口。
-3. 探测 Node、包管理器、数据库和 Docker 版本/可用性。
-4. 尝试运行当前仓库已有的 lint/typecheck/test/build 命令；不存在的命令标记 MISSING。
-5. 与 `DECISIONS.md` 对照，输出沿用、适配或需要 ADR 的项目。
-6. 给出 Phase 0 后续任务的实际文件路径映射和风险。
-
-## 6. 验收标准
-
-- [ ] 报告基于真实仓库，不使用推测补齐事实。
-- [ ] 有仓库结构和现有技术栈说明。
-- [ ] 记录所有已有脚本及实际执行结果。
-- [ ] 标出与启动包决策不一致的地方及影响。
-- [ ] 给出 `P0-02` 至 `P0-06` 的路径映射和复用建议。
-- [ ] 本任务没有产生非文档代码改动。
-
-## 7. 验收命令
-
-```bash
-git status --short
-git diff --stat
-test -f docs/sprints/phase-0/BASELINE_AUDIT.md
+```text
+docs/sprints/phase-0/BASELINE_AUDIT.md
 ```
 
-如果有意外代码改动，必须解释并还原与本任务无关的修改（不得触碰用户原有未提交改动）。
+不得修改业务代码。
 
-## 8. 手工验证步骤
+## 4. 必须验证
 
-1. 负责人核对报告中框架、目录、脚本、服务和数据库描述。
-2. 负责人决定采用现有技术栈还是按新仓库基线创建。
-3. 负责人批准后才派发 P0-02。
+### Git 仓库
 
-## 9. 输出
+```bash
+git rev-parse --show-toplevel
+git log -1 --oneline
+git status --short
+```
 
-`BASELINE_AUDIT.md`、建议路径映射、风险清单，以及明确的 `P0-02` 执行建议。
+### 当前分支
+
+优先：
+
+```bash
+git branch --show-current
+```
+
+不支持时：
+
+```bash
+git symbolic-ref --short HEAD
+```
+
+### 环境
+
+```bash
+git --version
+node --version
+pnpm --version
+docker --version
+docker compose version
+```
+
+不可用命令必须记录 `UNAVAILABLE`。
+
+## 5. 输出报告必须包含
+
+- 仓库路径；
+- 当前分支或 detached HEAD 状态；
+- 最新提交；
+- 工作区是否干净；
+- Git / Node / pnpm / Docker 实际版本；
+- 是否具备 Shell；
+- 是否具备仓库读写能力；
+- 是否可以进入 P0-02；
+- Sprint 文档完整性；
+- 阻塞项。
+
+## 6. Greenfield 判断
+
+如果没有业务代码，这是预期状态，不是错误。
+
+报告应明确：
+
+```text
+Project Type: GREENFIELD
+Legacy Code Migration: NOT REQUIRED
+Reference Repository Clone: NOT REQUIRED
+```
+
+## 7. 验收
+
+- [ ] 所有结论来自实际读取或实际命令输出；
+- [ ] 未把 GitHub API 查询伪装成本地 Shell 验证；
+- [ ] 未修改无关文件；
+- [ ] 明确 P0-02 是否可执行；
+- [ ] 未实际进入 P0-02。
+
+## 8. 状态
+
+完成后只能：
+
+- `DONE`：环境足以继续；
+- `PARTIAL`：非关键工具缺失，但 P0-02 可继续；
+- `BLOCKED`：缺少真实仓库/Shell/Node 等关键能力。
+
+完成后停止，等待审核。
