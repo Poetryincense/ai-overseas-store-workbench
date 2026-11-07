@@ -1,34 +1,31 @@
-AI 海外独立站工作台 V1 — AI 可执行 Sprint 启动包（Phase 0 → Phase 1）
+# AI 海外独立站工作台 V1 — AI 可执行 Sprint 启动包（Phase 0 → Phase 1）
 
-版本：1.0  
+**版本**：1.0  
+**基线日期**：2026-11-07  
+**适用范围**：已有代码仓库或新建仓库；一个个人工作空间；支持多个项目；暂不建设 SaaS 多租户。  
+**目标**：把仓库初始化到可重复开发、可测试、可部署的工程基线，并完成登录、工作空间上下文、多项目 CRUD、项目隔离及基础工作台页面。
 
-基线日期：2026-11-07  
+## 1. 本启动包包含什么
 
-适用范围：已有代码仓库或新建仓库；一个个人工作空间；支持多个项目；暂不建设 SaaS 多租户。  
+- `AGENTS.md`：放在目标代码仓库根目录的 AI 编码规则。
+- `SPRINT_PLAN.md`：Phase 0 / Phase 1 的任务顺序、依赖、并行策略和 Gate。
+- `DECISIONS.md`：本 Sprint 必须遵守的技术与业务边界。
+- `ACCEPTANCE_MATRIX.md`：整体验收清单。
+- `phase-0/`：工程基线任务，每个文件是一个可独立派发的 Issue。
+- `phase-1/`：个人工作台与多项目管理任务。
+- `templates/ISSUE_TEMPLATE.md`：后续新增 Issue 的模板。
+- `templates/AGENT_DISPATCH_PROMPT.md`：派发单个任务给 AI 编码 Agent 的标准提示词。
 
-目标：把仓库初始化到可重复开发、可测试、可部署的工程基线，并完成登录、工作空间上下文、多项目 CRUD、项目隔离及基础工作台页面。
+## 2. 如何使用
 
-1. 本启动包包含什么
-
-- AGENTS.md：放在目标代码仓库根目录的 AI 编码规则。
-- SPRINT_PLAN.md：Phase 0 / Phase 1 的任务顺序、依赖、并行策略和 Gate。
-- DECISIONS.md：本 Sprint 必须遵守的技术与业务边界。
-- ACCEPTANCE_MATRIX.md：整体验收清单。
-- phase-0/：工程基线任务，每个文件是一个可独立派发的 Issue。
-- phase-1/：个人工作台与多项目管理任务。
-- templates/ISSUE_TEMPLATE.md：后续新增 Issue 的模板。
-- templates/AGENT_DISPATCH_PROMPT.md：派发单个任务给 AI 编码 Agent 的标准提示词。
-
-2. 如何使用
-
-1. 将本目录中的 AGENTS.md、docs/（如采用）和 Sprint 文档复制到目标代码仓库。至少应将 AGENTS.md 放到仓库根目录。
-2. 先派发 P0-01-REPOSITORY-AUDIT，要求 Agent 只做审计，不要直接重构或覆盖现有代码。
-3. 审核 BASELINE_AUDIT.md 与 DECISIONS.md 中的技术决策后，再按依赖顺序派发其余任务。
-4. 每次只让一个 Agent 处理一个 Issue；只有 SPRINT_PLAN.md 明确允许并行且修改文件不冲突时才并行。
+1. 将本目录中的 `AGENTS.md`、`docs/`（如采用）和 Sprint 文档复制到目标代码仓库。至少应将 `AGENTS.md` 放到仓库根目录。
+2. 先派发 `P0-01-REPOSITORY-AUDIT`，要求 Agent 只做审计，不要直接重构或覆盖现有代码。
+3. 审核 `BASELINE_AUDIT.md` 与 `DECISIONS.md` 中的技术决策后，再按依赖顺序派发其余任务。
+4. 每次只让一个 Agent 处理一个 Issue；只有 `SPRINT_PLAN.md` 明确允许并行且修改文件不冲突时才并行。
 5. 每个 Issue 完成后，必须让 Agent 运行验收命令、提交测试结果和变更文件清单，再由主控 Agent 或负责人复核。
 6. 每个 Gate 通过后才进入下一阶段。
 
-3. 现有仓库优先原则
+## 3. 现有仓库优先原则
 
 如果目标仓库已经有可用实现：
 
@@ -38,7 +35,7 @@ AI 海外独立站工作台 V1 — AI 可执行 Sprint 启动包（Phase 0 → P
 - Issue 中列出的文件路径是“需要检查的输入/建议输出位置”，不是要求无条件覆盖的清单。
 - 如果实际文件结构不同，先在任务结果中给出路径映射，再实施。
 
-4. V1 当前 Sprint 的业务边界
+## 4. V1 当前 Sprint 的业务边界
 
 Phase 0 + Phase 1 只建设：
 
@@ -50,13 +47,13 @@ Phase 0 + Phase 1 只建设：
 - Dashboard 的真实项目统计；
 - Workspace / Project 数据访问边界和自动化测试。
 
-本阶段不建设 Agent 运行、市场研究、Shopify、网站模板、运营任务、审批中心、定时调度和 SaaS 多租户。页面不得用模拟数据伪装这些能力已经实现。
+本阶段**不建设** Agent 运行、市场研究、Shopify、网站模板、运营任务、审批中心、定时调度和 SaaS 多租户。页面不得用模拟数据伪装这些能力已经实现。
 
-5. 命令约定
+## 5. 命令约定
 
-任务中使用的 pnpm 命令以仓库根目录 package.json 中定义的脚本为准。P0 任务必须创建并验证本包要求的统一脚本。若已有脚本名称不同，保留现有脚本并在 BASELINE_AUDIT.md 中记录映射，不得为了机械匹配而重复造脚本。
+任务中使用的 `pnpm` 命令以仓库根目录 `package.json` 中定义的脚本为准。P0 任务必须创建并验证本包要求的统一脚本。若已有脚本名称不同，保留现有脚本并在 `BASELINE_AUDIT.md` 中记录映射，不得为了机械匹配而重复造脚本。
 
-6. 交付物
+## 6. 交付物
 
 Phase 1 完成时，代码仓库至少应有：
 
@@ -67,4 +64,4 @@ Phase 1 完成时，代码仓库至少应有：
 - 中文工作台基础页面；
 - 至少两个项目的跨项目隔离测试；
 - 本地启动文档、API 文档、数据库文档和 E2E 测试；
-- CI 可执行 lint、typecheck、test、build。
+- CI 可执行 `lint`、`typecheck`、`test`、`build`。
