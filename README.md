@@ -29,6 +29,28 @@
 
 目标代码仓库必须由执行 AI 实际访问。
 
+## 工程现状（Phase 0）
+
+当前仓库已建立 pnpm Monorepo 工程基线：
+
+- 应用：`apps/workbench`（Next.js App Router）、`apps/api`（Fastify）、`apps/worker`（Node.js）
+- 包：`packages/config`、`contracts`、`database`、`shared`
+- 质量工具链：ESLint + Prettier + TypeScript strict + Vitest
+- 本地基础设施：PostgreSQL + Redis（`infra/docker/compose.yaml`）
+- CI：GitHub Actions（`.github/workflows/ci.yml`）
+
+## 本地开发快速开始
+
+```bash
+cp .env.example .env            # 初始化环境变量（替换示例密码）
+pnpm install --frozen-lockfile   # 安装依赖
+pnpm dev:api                     # API → http://127.0.0.1:4000
+pnpm dev:worker                  # Worker（输出 ready 日志）
+pnpm dev:workbench               # Workbench → http://localhost:3000
+```
+
+完整步骤（PostgreSQL/Redis 启动、健康检查、检查命令、常见故障）见 [`docs/runbooks/local-development.md`](docs/runbooks/local-development.md)。
+
 ## 3. 开始前必须确认的能力
 
 新的 AI 工具必须具备：
