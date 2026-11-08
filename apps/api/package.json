@@ -6,6 +6,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "dev": "tsc -p tsconfig.json && node dist/index.js",
+    "start": "node dist/index.js",
     "lint": "eslint src --max-warnings=0 --config ../../eslint.config.mjs",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -16,10 +18,13 @@
     "@workspace/config": "workspace:0.1.0",
     "@workspace/contracts": "workspace:0.1.0",
     "@workspace/database": "workspace:0.1.0",
-    "@workspace/shared": "workspace:0.1.0"
+    "@workspace/shared": "workspace:0.1.0",
+    "fastify": "5.12.8",
+    "pg": "8.23.1"
   },
   "devDependencies": {
     "@types/node": "22.19.1",
+    "@types/pg": "8.23.1",
     "eslint": "9.39.5",
     "typescript": "5.9.3",
     "vitest": "3.2.7"

@@ -1,21 +1,28 @@
-import { CONTRACTS_BASE_PATH, type HealthStatusContract } from "@workspace/contracts";
-import { getDatabasePackageDescriptor } from "@workspace/database";
-import { type ServiceMetadata } from "@workspace/shared";
+import { loadEnv } from "@workspace/config";
+import { createLogger } from "@workspace/shared";
+import { buildServer } from "./server.js";
 
-export const API_METADATA: ServiceMetadata = {
-  service: "api",
-  version: "0.1.0"
-};
+const env = loadEnv();
+const logger = createLogger("api");
 
-export function getApiBootstrapStatus(): HealthStatusContract & {
-  readonly basePath: string;
-  readonly databaseEngine: string;
-} {
-  const db = getDatabasePackageDescriptor();
-  return {
-    service: API_METADATA.service,
-    status: "ok",
-    basePath: CONTRACTS_BASE_PATH,
-    databaseEngine: db.engine
+async function main(): Promise<void> {
+  const app = buildServer({ env, logger });
+
+  const shutdown = async (signal: string): Promise<void> => {
+    logger.info("shutting down", { signal });
+    await app.close();
+    process.exit(0);
   };
+
+  process.on("SIGINT", () => {
+    void shutdown("SIGINT");
+  });
+  process.on("SIGTERM", () => {
+    void shutdown("SIGTERM");
+  });
+
+  await app.listen({ host: env.host, port: env.port });
+  logger.info("api started", { host: env.host, port: env.port });
 }
+
+void main();

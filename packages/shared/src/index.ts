@@ -10,3 +10,5 @@ export function buildApiPath(segment: string): string {
   const normalized = segment.trim().replace(/^\/+/, "");
   return normalized.length > 0 ? `${API_PREFIX}/${normalized}` : API_PREFIX;
 }
+
+export * from "./logger.js";

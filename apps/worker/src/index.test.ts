@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { WORKER_METADATA, getWorkerBootstrapStatus } from "./index.js";
+import { WORKER_METADATA, getWorkerBootstrapStatus } from "./metadata.js";
 
 describe("@workspace/worker", () => {
   it("reports worker bootstrap status", () => {

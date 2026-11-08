@@ -12,3 +12,5 @@ export const WORKSPACE_PACKAGES: readonly WorkspacePackageManifest[] = [
   { name: "@workspace/shared", phase: "phase-0" },
   { name: "@workspace/config", phase: "phase-0" }
 ] as const;
+
+export * from "./env.js";
