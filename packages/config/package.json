@@ -13,12 +13,16 @@
     "./tsconfig.base.json": "./tsconfig.base.json"
   },
   "scripts": {
+    "lint": "eslint src --max-warnings=0 --config ../../eslint.config.mjs",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --config ../../vitest.config.ts src",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "devDependencies": {
     "@types/node": "22.19.1",
-    "typescript": "5.9.3"
+    "eslint": "9.39.5",
+    "typescript": "5.9.3",
+    "vitest": "3.2.7"
   }
 }
