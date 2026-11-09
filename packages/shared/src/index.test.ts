@@ -3,7 +3,7 @@ import { API_PREFIX, SYSTEM_NAME, buildApiPath } from "./index.js";
 
 describe("@workspace/shared", () => {
   it("exposes baseline system name and API v1 prefix", () => {
-    expect(SYSTEM_NAME).toBe("FAIL_PROBE_INTENTIONAL");
+    expect(SYSTEM_NAME).toBe("AI 海外独立站工作台");
     expect(API_PREFIX).toBe("/api/v1");
   });
 
