@@ -40,15 +40,25 @@
 
 ---
 
-## 3. 待补验 / 已知限制
+## 3. 负向验证（「故意失败 → CI 失败」）— 已完成
+
+通过真实 push 验证 CI 的失败检测与恢复路径：
+
+| 提交 | 内容 | CI run | 结论 |
+|---|---|---|---|
+| `89ba50e` | 故意破坏测试断言 | #42596660674 | ❌ `failure`（`Test` 步骤失败，`Build` 步骤 fail-fast 跳过） |
+| `9732227` | `git revert` 恢复 | #42597400850 | ✅ `success` |
+
+结论：CI 能正确检测失败（非零退出码 → job `failure`），恢复后回到 `success`，负向路径验证通过。
+
+## 4. 待补验 / 已知限制
 
 1. **PostgreSQL/Redis 本地运行时健康检查**：执行环境无 Docker（`docker`/`podman`/`colima`/`psql`/`redis-cli` 均 UNAVAILABLE），本地 `pg_isready` / `redis-cli ping` 未执行。CI 侧已用 service 容器初始化 PG/Redis（`Initialize containers` success），但本地 `/health/ready` 在 PG 可用时的 200 场景仍未真实验证。
-2. **「故意失败 → CI 失败」验证**：CI 已证明能成功运行全部检查，但尚未通过临时分支验证「某步骤失败时 CI 标记 failed」这一负向路径（GitHub Actions 平台默认行为：任何 step 非零退出即 fail）。
-3. **Docker Compose 配置运行时验证**：`docker compose -f infra/docker/compose.yaml config` 未执行（无 Docker），已用 `infra/docker/validate-compose.mjs`（yaml 静态校验）替代。
+2. **Docker Compose 配置运行时验证**：`docker compose -f infra/docker/compose.yaml config` 未执行（无 Docker），已用 `infra/docker/validate-compose.mjs`（yaml 静态校验）替代。
 
 ---
 
-## 4. Phase 0 交付物清单
+## 5. Phase 0 交付物清单
 
 | Issue | 产物 | 状态 |
 |---|---|---|
