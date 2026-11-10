@@ -13,18 +13,29 @@
   },
   "scripts": {
     "lint": "eslint src --max-warnings=0 --config ../../eslint.config.mjs",
-    "build": "tsc -p tsconfig.json",
+    "build": "prisma generate && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run --config ../../vitest.config.ts src",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+    "test": "vitest run --config ../../vitest.config.ts packages/database",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "db:generate": "prisma generate",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:status": "prisma migrate status",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
     "@workspace/config": "workspace:0.1.0",
-    "@workspace/shared": "workspace:0.1.0"
+    "@workspace/shared": "workspace:0.1.0",
+    "pg": "8.23.1"
   },
   "devDependencies": {
     "@types/node": "22.19.1",
+    "dotenv": "^18.0.10",
     "eslint": "9.39.5",
+    "prisma": "7.10.1",
+    "tsx": "^4.23.15",
     "typescript": "5.9.3",
     "vitest": "3.2.7"
   }

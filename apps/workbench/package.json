@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint src --max-warnings=0 --config ../../eslint.config.mjs",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run --config ../../vitest.config.ts src",
+    "test": "vitest run --config ../../vitest.config.ts apps/workbench",
     "clean": "rm -rf .next dist tsconfig.tsbuildinfo"
   },
   "dependencies": {

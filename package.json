@@ -25,10 +25,11 @@
     "verify": "pnpm run lint && pnpm run format:check && pnpm run typecheck && pnpm run test && pnpm run build",
     "test:integration": "node -e \"console.error('[RESERVED] test:integration will be connected in Phase 1 (P1-02/P1-06).'); process.exit(1);\"",
     "test:e2e": "node -e \"console.error('[RESERVED] test:e2e will be connected in Phase 1 (P1-09).'); process.exit(1);\"",
-    "db:generate": "node -e \"console.error('[RESERVED] db:generate will be connected in Phase 1 (P1-01).'); process.exit(1);\"",
-    "db:migrate:dev": "node -e \"console.error('[RESERVED] db:migrate:dev will be connected in Phase 1 (P1-01).'); process.exit(1);\"",
-    "db:migrate:deploy": "node -e \"console.error('[RESERVED] db:migrate:deploy will be connected in Phase 1 (P1-01).'); process.exit(1);\"",
-    "db:migrate:status": "node -e \"console.error('[RESERVED] db:migrate:status will be connected in Phase 1 (P1-01).'); process.exit(1);\""
+    "db:generate": "pnpm --filter @workspace/database run db:generate",
+    "db:migrate:dev": "pnpm --filter @workspace/database run db:migrate:dev",
+    "db:migrate:deploy": "pnpm --filter @workspace/database run db:migrate:deploy",
+    "db:migrate:status": "pnpm --filter @workspace/database run db:migrate:status",
+    "db:studio": "pnpm --filter @workspace/database run db:studio"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

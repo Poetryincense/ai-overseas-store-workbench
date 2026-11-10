@@ -4,6 +4,7 @@ import { defineConfig } from "vitest/config";
 const r = (relPath: string): string => fileURLToPath(new URL(relPath, import.meta.url));
 
 export default defineConfig({
+  root: r("."),
   resolve: {
     alias: {
       "@workspace/config": r("./packages/config/src/index.ts"),

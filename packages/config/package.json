@@ -16,7 +16,7 @@
     "lint": "eslint src --max-warnings=0 --config ../../eslint.config.mjs",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run --config ../../vitest.config.ts src",
+    "test": "vitest run --config ../../vitest.config.ts packages/config",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "devDependencies": {

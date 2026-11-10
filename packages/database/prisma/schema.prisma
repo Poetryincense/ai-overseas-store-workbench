@@ -1,0 +1,132 @@
+// Prisma schema for AI 海外独立站工作台 V1 — Phase 1 最小数据模型
+// 严格遵循 DECISIONS.md 的建议数据模型。
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum MemberRole {
+  OWNER
+}
+
+enum ProjectType {
+  SINGLE_PRODUCT
+  VERTICAL_BRAND
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique @map("email")
+  passwordHash String     @map("password_hash")
+  displayName  String?    @map("display_name")
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+
+  memberships WorkspaceMember[]
+  sessions    Session[]
+  projects    Project[] @relation("ProjectCreatedBy")
+
+  @@map("users")
+}
+
+model Workspace {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  members  WorkspaceMember[]
+  projects Project[]
+
+  @@map("workspaces")
+}
+
+model WorkspaceMember {
+  id          String     @id @default(uuid()) @db.Uuid
+  workspaceId String     @map("workspace_id") @db.Uuid
+  userId      String     @unique @map("user_id") @db.Uuid
+  role        MemberRole @default(OWNER)
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@unique([workspaceId, userId])
+  @@index([workspaceId])
+  @@map("workspace_members")
+}
+
+model Session {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  tokenHash  String    @unique @map("token_hash")
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  lastSeenAt DateTime? @map("last_seen_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Project {
+  id          String        @id @default(uuid()) @db.Uuid
+  workspaceId String        @map("workspace_id") @db.Uuid
+  name        String
+  slug        String
+  projectType ProjectType   @map("project_type")
+  status      ProjectStatus @default(DRAFT)
+  description String?       @map("description")
+  createdById String?       @map("created_by") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+  archivedAt  DateTime?     @map("archived_at") @db.Timestamptz
+
+  workspace Workspace       @relation(fields: [workspaceId], references: [id])
+  createdBy User?           @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  profile   ProjectProfile?
+
+  @@unique([workspaceId, slug])
+  @@index([workspaceId, status])
+  @@index([workspaceId, updatedAt])
+  @@map("projects")
+}
+
+model ProjectProfile {
+  id             String   @id @default(uuid()) @db.Uuid
+  projectId      String   @unique @map("project_id") @db.Uuid
+  initialIdea    String   @map("initial_idea")
+  targetMarket   String?  @map("target_market")
+  businessModel  String?  @map("business_model")
+  primaryGoal    String?  @map("primary_goal")
+  budgetAmount   Decimal? @map("budget_amount") @db.Decimal(12, 2)
+  budgetCurrency String?  @map("budget_currency") @db.VarChar(3)
+  constraints    Json?    @map("constraints") @db.JsonB
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@map("project_profiles")
+}

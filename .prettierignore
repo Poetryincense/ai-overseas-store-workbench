@@ -6,6 +6,7 @@ out/
 coverage/
 pnpm-lock.yaml
 *.tsbuildinfo
+packages/database/src/generated/
 docs/sprints/phase-0/BASELINE_AUDIT.md
 phase-0/
 phase-1/
