@@ -8,6 +8,7 @@ const testEnv: AppEnv = {
   nodeEnv: "test",
   host: "127.0.0.1",
   port: 4000,
+  webOrigin: "http://localhost:3000",
   databaseUrl: undefined,
   redisUrl: undefined
 };

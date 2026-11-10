@@ -12,13 +12,18 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config ../../vitest.config.ts apps/api",
+    "test:integration": "vitest run --config ../../vitest.config.ts apps/api",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {
+    "@fastify/cookie": "11.1.5",
+    "@fastify/cors": "11.4.1",
+    "@fastify/rate-limit": "11.2.2",
     "@workspace/config": "workspace:0.1.0",
     "@workspace/contracts": "workspace:0.1.0",
     "@workspace/database": "workspace:0.1.0",
     "@workspace/shared": "workspace:0.1.0",
+    "dotenv": "18.0.10",
     "fastify": "5.12.8",
     "pg": "8.23.1"
   },

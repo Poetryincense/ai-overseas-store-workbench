@@ -1,5 +1,11 @@
-import "dotenv/config";
+import { config } from "dotenv";
+import { fileURLToPath } from "node:url";
 import { ProjectType, createPrismaClient } from "../src/index.js";
+
+config({ path: fileURLToPath(new URL("../../../.env", import.meta.url)) });
+if (!process.env.DATABASE_URL) {
+  config({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
+}
 
 const databaseUrl = process.env.DATABASE_URL;
 if (databaseUrl === undefined || databaseUrl === "") {

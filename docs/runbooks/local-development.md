@@ -21,6 +21,7 @@ cp .env.example .env
 ```
 
 `.env` 已被 `.gitignore` 忽略，严禁提交真实密码或连接串。
+`WEB_ORIGIN` 必须精确匹配浏览器访问 Workbench 的 Origin（默认 `http://localhost:3000`），用于 CORS 与 CSRF 校验。
 
 ## 3. 启动 / 停止 PostgreSQL 与 Redis
 
@@ -64,6 +65,26 @@ pnpm dev:workbench  # Workbench    → http://localhost:3000
 curl -fsS http://127.0.0.1:4000/health/live   # 期望 200
 curl -fsS http://127.0.0.1:4000/health/ready  # PG 可用时 200，不可用时 503
 ```
+
+### 5.1 初始化 Owner 与认证 API（无公开注册）
+
+```bash
+pnpm owner:create                 # 交互式输入 Email；密码隐藏输入并二次确认
+pnpm owner:create --help          # 查看用法，不连接数据库
+```
+
+初始化命令只允许首次创建唯一 Owner、Workspace 和 OWNER Membership；重复执行会拒绝，不会覆盖密码。
+
+认证 API：
+
+```text
+GET  /api/v1/auth/csrf  -> 获取 CSRF token（请求修改状态的接口前调用）
+POST /api/v1/auth/login -> Email + password；需 Origin + CSRF cookie/header
+POST /api/v1/auth/logout -> 撤销 Session；需 Origin + CSRF cookie/header
+GET  /api/v1/auth/me    -> 返回当前用户、唯一 Workspace 与 OWNER 角色
+```
+
+前端跨域 fetch 需 `credentials: "include"`，并把 CSRF token 放入 `X-CSRF-Token`。API 只允许精确匹配 `WEB_ORIGIN` 的 Origin。Session Cookie 为 HttpOnly / SameSite=Lax；生产环境使用 Secure + `__Host-` 前缀。
 
 浏览器访问 Workbench 首页 `http://localhost:3000`，应显示系统名与 Phase 0 状态，且不含模拟数据。
 

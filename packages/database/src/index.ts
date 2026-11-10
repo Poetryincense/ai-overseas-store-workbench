@@ -25,6 +25,8 @@ export type {
   ProjectProfile
 } from "./generated/prisma/client.js";
 export * from "./generated/prisma/enums.js";
+export { createOwnerAccount } from "./owner.js";
+export type { CreateOwnerInput, CreatedOwner } from "./owner.js";
 
 export function createPrismaClient(databaseUrl: string): PrismaClient {
   const adapter = new PrismaPg({ connectionString: databaseUrl });

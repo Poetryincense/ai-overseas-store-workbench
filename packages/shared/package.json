@@ -19,7 +19,8 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@workspace/config": "workspace:0.1.0"
+    "@workspace/config": "workspace:0.1.0",
+    "argon2": "0.45.2"
   },
   "devDependencies": {
     "@types/node": "22.19.1",

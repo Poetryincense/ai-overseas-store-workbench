@@ -12,3 +12,4 @@ export function buildApiPath(segment: string): string {
 }
 
 export * from "./logger.js";
+export * from "./password.js";

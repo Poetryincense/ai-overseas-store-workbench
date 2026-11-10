@@ -1,6 +1,10 @@
+import { config as loadDotenv } from "dotenv";
+import { fileURLToPath } from "node:url";
 import { loadEnv } from "@workspace/config";
 import { createLogger } from "@workspace/shared";
 import { buildServer } from "./server.js";
+
+loadDotenv({ path: fileURLToPath(new URL("../../../.env", import.meta.url)) });
 
 const env = loadEnv();
 const logger = createLogger("api");
