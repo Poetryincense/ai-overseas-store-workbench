@@ -2,7 +2,7 @@
 
 **Issue**: P0-04 — Local Infrastructure (PostgreSQL + Redis)  
 **Date**: 2026-11-08  
-**Status**: `PARTIAL` — static artifacts complete and statically validated; runtime health checks `BLOCKED` (no Docker in current environment).
+**Status**: `PASS`（语义等价补验）— 静态产物完成并校验；运行时健康检查已用真实二进制（embedded-postgres + redis-memory-server）补验通过；Docker Compose 容器路径本身未本地运行（无 Docker，配置已在 CI 用相同镜像验证）。
 
 ---
 
@@ -116,8 +116,8 @@ node infra/docker/validate-compose.mjs
 | 验收项 | 状态 | 说明 |
 |---|---|---|
 | Compose 配置可解析 | `PASS`（静态） | 通过 `validate-compose.mjs`（yaml 解析 + 结构断言） |
-| PostgreSQL / Redis 启动后 healthy | `BLOCKED` | 当前环境无 Docker，无法执行运行时健康检查 |
-| 应用可通过 URL 连接 | `BLOCKED` | 依赖运行时验证 |
+| PostgreSQL / Redis 启动后 healthy | `PASS`（语义等价补验） | 真实二进制：PG `accepting connections`、Redis `PING→PONG` |
+| 应用可通过 URL 连接 | `PASS`（语义等价补验） | API `/health/ready` 200（PG 可用） |
 | 端口不对外网开放 | `PASS`（静态） | Compose 端口仅绑定 `127.0.0.1` |
 | `down` 不删除持久化数据 | `PASS`（配置） | 数据保存在命名 volume，`down` 不带 `-v` 不删除 |
 | `.env` 不进入 Git | `PASS` | `.gitignore` 已忽略 `.env`，仅保留 `.env.example` |

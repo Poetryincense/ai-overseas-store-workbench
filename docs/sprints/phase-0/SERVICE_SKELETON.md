@@ -2,7 +2,7 @@
 
 **Issue**: P0-05 — Service Skeleton & Health Checks  
 **Date**: 2026-11-08  
-**Status**: `PARTIAL` — 三服务骨架、健康检查、结构化日志均完成并运行时验证通过；「PG 可用时 `/health/ready` 返回 200」场景 `BLOCKED`（环境无 PostgreSQL）。
+**Status**: `PASS`（语义等价补验）— 三服务骨架、健康检查、结构化日志均完成并运行时验证通过；「PG 可用时 `/health/ready` 返回 200」场景已用真实二进制（embedded-postgres）补验通过。
 
 ---
 
@@ -79,7 +79,7 @@ pnpm dev            # 默认指向 dev:api
 | Worker 优雅关闭 | `SIGTERM` | `{"message":"worker shutting down","signal":"SIGTERM"}` + exit 0 | `PASS` |
 | Workbench 构建 | `pnpm build`（next build） | `✓ Compiled successfully`，静态页面 `/` 与 `/_not-found` | `PASS` |
 | Workbench 访问 | `next start` + `curl /` | `200`，页面显示系统名 + Phase 0 状态，无虚构数据 | `PASS` |
-| API ready（PG 可用） | — | 需要真实 PostgreSQL | `BLOCKED` |
+| API ready（PG 可用） | `DATABASE_URL` 指向真实 PG + `curl /health/ready` | `200` + `{"status":"ok","checks":{"database":"up"}}` | `PASS`（补验） |
 
 ### 日志含密检查
 启动、请求、关闭日志均仅含 `host/port/statusCode/requestId/method/url/signal` 等安全字段，无 `DATABASE_URL`、密码或连接串泄漏。
@@ -97,4 +97,4 @@ pnpm dev            # 默认指向 dev:api
 
 ## 8. 阻塞项
 
-当前环境无 Docker/PostgreSQL，因此「PG 可用时 `/health/ready` 返回 200」与「Workbench/API 经容器网络连接 PG」无法真实验证，标记 `BLOCKED`，待具备 PG 后补验（参见 `LOCAL_INFRASTRUCTURE.md`）。
+「PG 可用时 `/health/ready` 返回 200」已通过 `embedded-postgres`（真实 PG 二进制）补验通过（见 `G0_ACCEPTANCE.md` 第 4 节）。「Workbench/API 经容器网络连接 PG」的 Docker Compose 容器路径本身未本地运行（无 Docker），但 Compose 配置已在 CI 用相同镜像验证。
