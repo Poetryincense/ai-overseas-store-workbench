@@ -14,4 +14,12 @@ describe("loadEnv", () => {
       "WEB_ORIGIN must be a canonical http(s) origin without a path"
     );
   });
+
+  it("defaults and validates the login rate limit", () => {
+    expect(loadEnv({}).loginRateLimitMax).toBe(5);
+    expect(loadEnv({ AUTH_LOGIN_RATE_LIMIT_MAX: "50" }).loginRateLimitMax).toBe(50);
+    expect(() => loadEnv({ AUTH_LOGIN_RATE_LIMIT_MAX: "0" })).toThrow(
+      "Invalid AUTH_LOGIN_RATE_LIMIT_MAX"
+    );
+  });
 });

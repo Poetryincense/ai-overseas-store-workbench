@@ -89,7 +89,7 @@ export async function registerAuthRoutes(
       preHandler: requireCsrf,
       config: {
         rateLimit: {
-          max: 5,
+          max: env.loginRateLimitMax,
           timeWindow: 15 * 60 * 1000,
           errorResponseBuilder: (request, context) =>
             Object.assign(new Error("Too many login attempts; try again later"), {

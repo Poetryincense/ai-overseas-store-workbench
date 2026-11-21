@@ -5,6 +5,7 @@ export interface AppEnv {
   readonly host: string;
   readonly port: number;
   readonly webOrigin: string;
+  readonly loginRateLimitMax: number;
   readonly databaseUrl: string | undefined;
   readonly redisUrl: string | undefined;
 }
@@ -40,12 +41,24 @@ function parseWebOrigin(value: string | undefined): string {
   }
 }
 
+function parseLoginRateLimitMax(value: string | undefined): number {
+  if (value === undefined) {
+    return 5;
+  }
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 100) {
+    throw new Error(`Invalid AUTH_LOGIN_RATE_LIMIT_MAX value: "${value}"`);
+  }
+  return parsed;
+}
+
 export function loadEnv(env: NodeJS.ProcessEnv = process.env): AppEnv {
   return {
     nodeEnv: parseNodeEnv(env.NODE_ENV),
     host: env.HOST ?? "127.0.0.1",
     port: parsePort(env.PORT),
     webOrigin: parseWebOrigin(env.WEB_ORIGIN),
+    loginRateLimitMax: parseLoginRateLimitMax(env.AUTH_LOGIN_RATE_LIMIT_MAX),
     databaseUrl: env.DATABASE_URL,
     redisUrl: env.REDIS_URL
   };

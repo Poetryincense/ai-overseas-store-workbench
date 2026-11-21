@@ -28,6 +28,7 @@ const env: AppEnv = {
   host: "127.0.0.1",
   port: 4000,
   webOrigin,
+  loginRateLimitMax: 5,
   databaseUrl,
   redisUrl: undefined
 };
