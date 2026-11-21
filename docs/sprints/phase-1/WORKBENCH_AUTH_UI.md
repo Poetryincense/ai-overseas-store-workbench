@@ -1,7 +1,7 @@
 # WORKBENCH_AUTH_UI.md — P1-03 Authentication UI & Protected Routes
 
 **Issue**: P1-03 — Authentication UI & Protected Routes
-**Status**: `DONE`（本地 E2E 与 CI 配置见下文，以实际运行结果为准）
+**Status**: `DONE`（本地 `pnpm verify` 与 E2E 通过；GitHub CI run #10 于 2026-11-21 全部通过，包括 E2E）
 
 ## 页面与路由
 

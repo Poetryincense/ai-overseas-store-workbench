@@ -26,6 +26,8 @@ flowchart TD
   P006 --> P101[P1-01 数据模型与 Migration]
   P101 --> P102[P1-02 Owner 初始化与 Auth API]
   P102 --> P103[P1-03 登录 UI]
+  P103 --> P1035[P1-03.5 工程基线]
+  P1035 --> P104[P1-04 Workspace/Project Scope]
   P101 --> P104[P1-04 Workspace/Project Scope]
   P101 --> P105[P1-05 Project Domain Service]
   P104 --> P106[P1-06 Project CRUD API]
@@ -49,7 +51,8 @@ flowchart TD
 - P0-01 必须先完成。
 - Monorepo 根配置、依赖锁文件和脚本只能由一个 Agent 修改。
 - 数据库 Schema 与 Migration 由 P1-01 单 Agent 负责。
-- Auth Session、Cookie 和安全中间件由 P1-02/P1-04 按顺序负责。
+- Auth Session、Cookie 和安全中间件由 P1-02/P1-03.5/P1-04 按顺序负责。
+- P1-03.5 的迁移（审计表、恢复码表、slug 部分唯一索引）按顺序单独提交，便于单独回滚。
 - P1-09 只能在 API 和页面开发完成后执行。
 
 ## 4. Phase 0 Issue 清单
@@ -70,6 +73,7 @@ flowchart TD
 | P1-01 | Identity & Project Schema | P0 全部 | 0.5–1 天 | Prisma Schema + Migration |
 | P1-02 | Owner Bootstrap & Auth API | P1-01 | 1 天 | 初始化命令、登录/登出/me |
 | P1-03 | Auth UI & Protected Routes | P1-02 | 0.5–1 天 | 登录页、会话状态、路由保护 |
+| P1-03.5 | Engineering Baseline | P1-03 | 1–1.5 天 | 部署配置、Redis 限流接口、安全基线、Owner 恢复、审计表、slug 策略、备份演练（见 `docs/sprints/phase-1/P1-03.5-BASELINE.md`） |
 | P1-04 | Workspace Context & Scope Guard | P1-01,P1-02 | 0.5–1 天 | Workspace resolver、scope guard |
 | P1-05 | Project Domain & State Rules | P1-01 | 0.5–1 天 | DTO、Service、状态机 |
 | P1-06 | Project CRUD API | P1-04,P1-05 | 1 天 | 项目 API、OpenAPI、集成测试 |
@@ -87,6 +91,11 @@ flowchart TD
 - [ ] `lint`、`typecheck`、`test`、`build` 通过。
 - [ ] CI 在干净环境通过。
 - [ ] README 能让新环境开发者按步骤启动项目。
+
+### 工程基线（P1-03.5 通过后追加）
+- [ ] 本机与云端配置档案可通过启动校验区分。
+- [ ] 限流存储可切换，云端档案强制 Redis。
+- [ ] 备份与恢复演练有已提交的记录。
 
 ### G1：个人工作台基础能力通过
 - [ ] 可以通过初始化命令创建唯一所有者。

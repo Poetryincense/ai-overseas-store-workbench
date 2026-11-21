@@ -26,6 +26,12 @@
 | D-020 | 运行环境 | Docker Compose 提供 PostgreSQL、Redis；应用本地开发运行 | 暂不强制所有应用容器化 |
 | D-021 | Workspace 包名 | `@workspace/workbench`、`@workspace/api`、`@workspace/worker`、`@workspace/database`、`@workspace/contracts`、`@workspace/shared`、`@workspace/config` | 不在不同 Issue 中自行变更包名 |
 | D-022 | 版本锁定 | 固定 Node.js/pnpm 版本；`save-exact=true`；直接依赖使用明确版本；提交 lockfile | 不使用浮动直接依赖版本 |
+| D-023 | 部署模式 | 先本机运行；云端使用同一代码与同一配置名，由 ADR-0002 约束；配置只来自环境变量并启动时校验 | 不在代码中写死环境差异 |
+| D-024 | Redis 角色 | Redis 本机可选、云端必需；限流经 `RateLimitStore` 接口切换（内存/Redis）；认证失败时关闭（fail closed）；不做缓存；队列另立 ADR | 不因“降级”移除 Redis 设计 |
+| D-025 | Owner 恢复 | 一次性恢复码（哈希存储）加停机 CLI `owner:recover`；无公开找回接口；恢复后撤销全部 Session 并写审计 | 不引入邮件找回或公开重置接口 |
+| D-026 | Project slug | 唯一性仅对未归档项目生效；归档释放 slug；归档项目仅通过 ID 访问 | 不以 slug 访问归档项目 |
+| D-027 | 价值焦点 | V1 的价值目标为“建站”，但与 Phase 0–1 范围冲突，需 ADR-0006 的范围变更决策；推荐 Phase 1 保持容器范围，建站进入 Phase 2 | 在范围变更批准前不实现任何建站或外部平台功能 |
+| D-028 | Agent 设计原则 | 所有状态变更带 Actor；写操作经命令层并同事务审计；外部副作用需人工确认；Kill switch 与预算上限在设计中预留（ADR-0004，Proposed） | Phase 0–1 不实现 Agent 运行时或工具调用 |
 
 ## 建议数据模型（Phase 1 最小集合）
 
